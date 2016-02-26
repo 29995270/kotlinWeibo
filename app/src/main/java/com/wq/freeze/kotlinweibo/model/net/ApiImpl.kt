@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.wq.freeze.kotlinweibo.extension.androidSchedulers
 import com.wq.freeze.kotlinweibo.model.config.BASE_URI
 import com.wq.freeze.kotlinweibo.model.data.TokenInfo
+import com.wq.freeze.kotlinweibo.model.data.User
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -46,6 +47,10 @@ class ApiImpl(){
 
         fun getRecentPublicWB(token: String, pageIndex: Int): Observable<WeiboPage> {
             return api.getRecentPublicWB(accessToken = token, page = pageIndex).androidSchedulers()
+        }
+
+        fun getUserInfo(token: String, uid: Long, nick: String? = null): Observable<User> {
+            return api.getUserInfo(token, uid, nick).androidSchedulers()
         }
     }
 }

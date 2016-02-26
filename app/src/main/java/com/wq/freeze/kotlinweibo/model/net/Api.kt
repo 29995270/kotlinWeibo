@@ -1,7 +1,7 @@
 package com.wq.freeze.kotlinweibo.model.net
 
-import com.wq.freeze.kotlinweibo.model.data.AuthorizeCode
 import com.wq.freeze.kotlinweibo.model.data.TokenInfo
+import com.wq.freeze.kotlinweibo.model.data.User
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import retrofit2.Response
 import retrofit2.http.Field
@@ -28,4 +28,8 @@ interface  Api {
     //返回最新的公共微博
     @GET("/2/statuses/public_timeline.json")
     fun getRecentPublicWB(@Query("access_token") accessToken: String, @Query("count") count: Int = 3, @Query("page") page: Int = 1, @Query("base_app") baseApp: Int = 0): Observable<WeiboPage>
+
+    //获取用户信息
+    @GET("/2/users/show.json")
+    fun getUserInfo(@Query("access_token") accessToken: String, @Query("uid") uid: Long, @Query("screen_name") nick: String? = null): Observable<User>
 }

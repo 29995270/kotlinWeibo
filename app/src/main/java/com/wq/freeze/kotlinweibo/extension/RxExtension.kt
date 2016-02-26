@@ -11,11 +11,11 @@ import rx.schedulers.Schedulers
 fun <T> Observable<T>.androidSchedulers() =
         this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
-fun <T> Observable<T>.safelySubscribeWithLifecycle( activity: RxAppCompatActivity, action1: (t: T) -> Unit ) =
+fun <T> Observable<T>.safelySubscribeWithLifecycle( activity: RxAppCompatActivity, action1: (t: T) -> Unit, action0: (t: Throwable) -> Unit = { it.printStackTrace() } ) =
         compose(activity.bindToLifecycle<T>()).
         subscribe(
                 { action1.invoke(it) },
-                { it.printStackTrace() }
+                { action0.invoke(it) }
         )
 
 fun <T> Observable<T>.safelySubscribe( action1: (t: T) -> Unit ) =
