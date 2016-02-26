@@ -5,6 +5,9 @@ import android.util.Log
 /**
  * Created by wangqi on 2016/2/25.
  */
-fun Any?.aaaLog( log:() -> String? ){
+fun<T> T.aaaLogv( log:() -> String? ){
     Log.v("AAA", log.invoke())
+}
+fun<T> T.aaaLoge( log:() -> String? ){
+    Log.e("AAA", log.invoke())
 }

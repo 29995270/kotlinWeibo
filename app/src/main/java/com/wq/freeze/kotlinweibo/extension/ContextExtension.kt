@@ -1,8 +1,16 @@
 package com.wq.freeze.kotlinweibo.extension
 
+import android.app.Activity
 import android.content.Context
+import android.support.annotation.IdRes
 import android.support.v4.content.ContextCompat
-import android.widget.Toast
+import android.view.View
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * Created by wangqi on 2016/2/25.
@@ -10,3 +18,28 @@ import android.widget.Toast
 fun Context.loadColor(colorRes: Int) = ContextCompat.getColor(this, colorRes)
 //fun Context.toast(toString:() -> String) = Toast.makeText(this, toString.invoke(), Toast.LENGTH_SHORT).show()
 //fun Context.toast(stringRes: Int) = Toast.makeText(this, this.getString(stringRes), Toast.LENGTH_SHORT).show()
+
+fun <T: View>Activity.lazyFind(@IdRes id: Int): ReadOnlyProperty<Activity, T> {
+    return object : ReadOnlyProperty<Activity, T>{
+        var view: T? = null
+        override fun getValue(thisRef: Activity, property: KProperty<*>): T {
+            if (view == null) {
+                view = thisRef.findViewById(id) as T
+            }
+            return view!!
+        }
+    }
+}
+
+fun RxAppCompatActivity.postRun(delay: Long = 0, runnable: () -> Unit) {
+    val decorView = this.window.decorView
+    if (decorView == null) {
+        aaaLoge { "may activity not init, can not post run" }
+    } else {
+        Observable.just(null)
+                .delay(delay, TimeUnit.MILLISECONDS)
+                .compose(this.bindToLifecycle<Nothing>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ runnable() })
+    }
+}
