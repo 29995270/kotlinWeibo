@@ -1,7 +1,9 @@
 package com.wq.freeze.kotlinweibo.model.net
 
 import com.squareup.moshi.Moshi
+import com.wq.freeze.kotlinweibo.App
 import com.wq.freeze.kotlinweibo.extension.androidSchedulers
+import com.wq.freeze.kotlinweibo.model.config.AppPreference
 import com.wq.freeze.kotlinweibo.model.config.BASE_URI
 import com.wq.freeze.kotlinweibo.model.data.TokenInfo
 import com.wq.freeze.kotlinweibo.model.data.User
@@ -33,6 +35,9 @@ class ApiImpl(){
 
         fun moshiInstanc() = moshi
 
+        val token by AppPreference.readOnlyPreference(App.appContext, "token", "")
+        val uid by AppPreference.readOnlyPreference(App.appContext, "uid", 0L)
+
 //        fun authorization(): Observable<AuthorizeCode> {
 //            return api.authorization(APP_ID, APP_SECRET, REDIRECT_URI)
 //        }
@@ -45,8 +50,20 @@ class ApiImpl(){
             return api.revokeOauth2(accessToken).androidSchedulers()
         }
 
-        fun getRecentPublicWB(token: String, pageIndex: Int): Observable<WeiboPage> {
+        fun getRecentPublicWB(pageIndex: Int): Observable<WeiboPage> {
             return api.getRecentPublicWB(accessToken = token, page = pageIndex).androidSchedulers()
+        }
+
+        fun getMyHomeWB(page: Int): Observable<WeiboPage>{
+            return api.getMyHomeWB(accessToken = token, page = page).androidSchedulers()
+        }
+
+        fun getMyWB(page: Int): Observable<WeiboPage> {
+            return api.getUserWB(accessToken = token, uid = uid, page = page).androidSchedulers()
+        }
+
+        fun getUserWB(uid: Long, page: Int): Observable<WeiboPage> {
+            return api.getUserWB(accessToken = token, uid = uid, page = page).androidSchedulers()
         }
 
         fun getUserInfo(token: String, uid: Long, nick: String? = null): Observable<User> {

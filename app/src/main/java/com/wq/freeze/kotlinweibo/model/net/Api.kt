@@ -27,7 +27,35 @@ interface  Api {
 
     //返回最新的公共微博
     @GET("/2/statuses/public_timeline.json")
-    fun getRecentPublicWB(@Query("access_token") accessToken: String, @Query("count") count: Int = 3, @Query("page") page: Int = 1, @Query("base_app") baseApp: Int = 0): Observable<WeiboPage>
+    fun getRecentPublicWB(@Query("access_token") accessToken: String, @Query("count") count: Int = 20, @Query("page") page: Int = 1, @Query("base_app") baseApp: Int = 0): Observable<WeiboPage>
+
+    //返回登录用户的微博广场
+    @GET("/2/statuses/home_timeline.json")
+    fun getMyHomeWB(
+            @Query("access_token") accessToken: String,
+            @Query("since_id") sinceSecend: Long = 0,
+            @Query("max_id") maxId: Long = 0,
+            @Query("count") count: Int = 20,
+            @Query("page") page: Int = 1,
+            @Query("base_app") baseApp: Int = 0,  //是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0
+            @Query("feature") filterType: Int = 0, //过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0
+            @Query("trim_user") trimUser: Int = 0  //返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0
+    ): Observable<WeiboPage>
+
+    //获取指定用户的微博
+    @GET("/2/statuses/user_timeline.json")
+    fun getUserWB(
+            @Query("access_token") accessToken: String,
+            @Query("uid") uid: Long,
+            @Query("screen_name") nick: String? = null,
+            @Query("since_id") sinceSecend: Long = 0,
+            @Query("max_id") maxId: Long = 0,
+            @Query("count") count: Int = 20,
+            @Query("page") page: Int = 1,
+            @Query("base_app") baseApp: Int = 0,  //是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0
+            @Query("feature") filterType: Int = 0, //过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0
+            @Query("trim_user") trimUser: Int = 0  //返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0
+    ): Observable<WeiboPage>
 
     //获取用户信息
     @GET("/2/users/show.json")

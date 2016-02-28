@@ -8,22 +8,20 @@ import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder
-import com.facebook.drawee.generic.RoundingParams
 import com.facebook.drawee.view.SimpleDraweeView
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import com.wq.freeze.kotlinweibo.App
 import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.aaaLogv
 import com.wq.freeze.kotlinweibo.extension.lazyFind
 import com.wq.freeze.kotlinweibo.extension.safelySubscribeWithLifecycle
-import com.wq.freeze.kotlinweibo.extension.simpleDraweeView
+import com.wq.freeze.kotlinweibo.extension.showAlert
+import com.wq.freeze.kotlinweibo.model.config.AppPreference
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
 import com.wq.freeze.kotlinweibo.ui.adapter.MainPageAdapter
-import org.jetbrains.anko.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.find
 import kotlin.properties.Delegates
 
 class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
@@ -36,8 +34,11 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     lateinit var avatar: SimpleDraweeView
     lateinit var nick: TextView
 
-    var token by Delegates.notNull<String>()
-    var uid by Delegates.notNull<Long>()
+    var tokenPref by AppPreference.anyPreference(App.appContext, "token", "")
+    var uidPref by AppPreference.anyPreference(App.appContext, "uid", 0L)
+
+//    var token by Delegates.notNull<String>()
+//    var uid by Delegates.notNull<Long>()
 
     var mainPageAdapter by Delegates.notNull<MainPageAdapter>()
 
@@ -57,8 +58,8 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
         //        supportActionBar?.setHomeButtonEnabled(true);
         mDrawerToggle.syncState()
 
-        token = intent.extras.getString("token", "null")
-        uid = intent.extras.getLong("uid", 0L)
+//        token = intent.extras.getString("token", "null")
+//        uid = intent.extras.getLong("uid", 0L)
         initViewPage()
         initNavigationView()
     }
@@ -66,7 +67,7 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     private fun initNavigationView() {
         avatar = navi.getHeaderView(0).find<SimpleDraweeView>(R.id.avatar)
         nick = navi.getHeaderView(0).find<TextView>(R.id.nick)
-        ApiImpl.instance.getUserInfo(token, uid)
+        ApiImpl.instance.getUserInfo(tokenPref, uidPref)
                 .safelySubscribeWithLifecycle(this, {
                     avatar.setImageURI(Uri.parse(it.profile_image_url), null)
                     nick.text = it.name
@@ -85,7 +86,11 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     }
 
     private fun logout() {
-
+        showAlert("are you sure?", "logout"){
+            tokenPref = ""
+            uidPref = 0L
+            finish()
+        }
     }
 
     private fun initViewPage() {

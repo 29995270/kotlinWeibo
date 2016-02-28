@@ -1,6 +1,7 @@
 package com.wq.freeze.kotlinweibo.ui.adapter
 
 import android.graphics.Color
+import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -33,7 +34,9 @@ class MainPageAdapter(val fm: FragmentManager, val activity: RxAppCompatActivity
 
     override fun getItem(p0: Int): Fragment? {
         aaaLoge { "new $p0" }
-        return WeiBoListFragment()
+        return WeiBoListFragment().apply {
+            arguments = Bundle()
+        }
     }
 
     override fun getCount() = 3

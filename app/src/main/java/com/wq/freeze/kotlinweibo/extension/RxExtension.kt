@@ -1,6 +1,7 @@
 package com.wq.freeze.kotlinweibo.extension
 
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import com.trello.rxlifecycle.components.support.RxFragment
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -17,6 +18,13 @@ fun <T> Observable<T>.safelySubscribeWithLifecycle( activity: RxAppCompatActivit
                 { action1.invoke(it) },
                 { action0.invoke(it) }
         )
+
+fun <T> Observable<T>.safelySubscribeWithLifecycle( fragment: RxFragment, action1: (t: T) -> Unit, action0: (t: Throwable) -> Unit = { it.printStackTrace() } ) =
+        compose(fragment.bindToLifecycle<T>()).
+                subscribe(
+                        { action1.invoke(it) },
+                        { action0.invoke(it) }
+                )
 
 fun <T> Observable<T>.safelySubscribe( action1: (t: T) -> Unit ) =
         subscribe(

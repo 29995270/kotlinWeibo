@@ -1,6 +1,7 @@
 package com.wq.freeze.kotlinweibo.model.config
 
 import android.content.Context
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -10,6 +11,9 @@ import kotlin.reflect.KProperty
 object AppPreference{
     fun <T>anyPreference(context: Context, name: String, default: T) =
             AnyPreference(context, name, default)
+
+    fun <T>readOnlyPreference(context: Context, name: String, default: T) =
+            ReadOnlyPreference(context, name, default)
 }
 
 class AnyPreference<T>(val context: Context, val name: String, val default: T): ReadWriteProperty<Any?, T> {
@@ -31,6 +35,25 @@ class AnyPreference<T>(val context: Context, val name: String, val default: T): 
         }
     }
 
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        return when(default) {
+            is Long -> prefs.getLong(name, default)
+            is Boolean -> prefs.getBoolean(name, default)
+            is Float -> prefs.getFloat(name, default)
+            is Int -> prefs.getInt(name, default)
+            is String -> prefs.getString(name, default)
+            else -> {
+                throw RuntimeException("can not get type ${default.toString()}")
+            }
+        } as T
+    }
+}
+
+class ReadOnlyPreference<T>(val context: Context, val name: String, val default: T): ReadOnlyProperty<Any?, T> {
+
+    val prefs by lazy {
+        context.getSharedPreferences("default", Context.MODE_PRIVATE)
+    }
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return when(default) {
             is Long -> prefs.getLong(name, default)
