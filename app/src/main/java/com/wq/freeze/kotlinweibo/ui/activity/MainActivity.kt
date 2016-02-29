@@ -20,7 +20,6 @@ import com.wq.freeze.kotlinweibo.extension.showAlert
 import com.wq.freeze.kotlinweibo.model.config.AppPreference
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
 import com.wq.freeze.kotlinweibo.ui.adapter.MainPageAdapter
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
 
@@ -96,6 +95,7 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     private fun initViewPage() {
         mainPageAdapter = MainPageAdapter(supportFragmentManager, this)
         viewPage.adapter = mainPageAdapter
+        viewPage.offscreenPageLimit = 2
         tabLayout.setupWithViewPager(viewPage)
         tabLayout.setTabsFromPagerAdapter(mainPageAdapter)
         tabLayout.setOnTabSelectedListener(this)

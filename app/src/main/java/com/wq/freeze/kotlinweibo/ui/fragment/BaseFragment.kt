@@ -1,16 +1,22 @@
 package com.wq.freeze.kotlinweibo.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trello.rxlifecycle.components.support.RxFragment
+import com.wq.freeze.kotlinweibo.extension.aaaLogv
+import com.wq.freeze.kotlinweibo.extension.safelySubscribeWithLifecycle
+import rx.subjects.BehaviorSubject
+import rx.subjects.PublishSubject
 
 /**
  * Created by wangqi on 2016/2/26.
  */
 abstract class BaseFragment: RxFragment() {
     abstract val layoutRes: Int
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

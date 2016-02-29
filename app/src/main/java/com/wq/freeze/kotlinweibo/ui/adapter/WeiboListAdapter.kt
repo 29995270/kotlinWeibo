@@ -9,6 +9,9 @@ import android.widget.TextView
  * Created by Administrator on 2016/2/27.
  */
 class WeiboListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+
+
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
 
     }

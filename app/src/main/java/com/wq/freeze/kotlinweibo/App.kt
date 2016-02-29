@@ -19,36 +19,36 @@ class App: Application() {
         super.onCreate()
         appContext = this
         Fresco.initialize(this);
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks{
-            override fun onActivityStarted(p0: Activity?) {
-                aaaLogv { "$p0 started" }
-            }
-
-            override fun onActivityStopped(p0: Activity?) {
-                aaaLogv { "$p0 stopped" }
-            }
-
-            override fun onActivityResumed(p0: Activity?) {
-                aaaLogv { "$p0 resumed" }
-            }
-
-            override fun onActivitySaveInstanceState(p0: Activity?, p1: Bundle?) {
-                aaaLogv { "$p0 saveInstance" }
-            }
-
-            override fun onActivityDestroyed(p0: Activity?) {
-                aaaLogv { "$p0 destroyed" }
-            }
-
-            override fun onActivityCreated(p0: Activity?, p1: Bundle?) {
-                aaaLogv { "$p0 created" }
-            }
-
-            override fun onActivityPaused(p0: Activity?) {
-                aaaLogv { "$p0 paused" }
-            }
-
-        })
+//        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks{
+//            override fun onActivityStarted(p0: Activity?) {
+//                aaaLogv { "$p0 started" }
+//            }
+//
+//            override fun onActivityStopped(p0: Activity?) {
+//                aaaLogv { "$p0 stopped" }
+//            }
+//
+//            override fun onActivityResumed(p0: Activity?) {
+//                aaaLogv { "$p0 resumed" }
+//            }
+//
+//            override fun onActivitySaveInstanceState(p0: Activity?, p1: Bundle?) {
+//                aaaLogv { "$p0 saveInstance" }
+//            }
+//
+//            override fun onActivityDestroyed(p0: Activity?) {
+//                aaaLogv { "$p0 destroyed" }
+//            }
+//
+//            override fun onActivityCreated(p0: Activity?, p1: Bundle?) {
+//                aaaLogv { "$p0 created" }
+//            }
+//
+//            override fun onActivityPaused(p0: Activity?) {
+//                aaaLogv { "$p0 paused" }
+//            }
+//
+//        })
     }
 
 }

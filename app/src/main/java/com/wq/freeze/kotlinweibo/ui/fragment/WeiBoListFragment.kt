@@ -20,6 +20,7 @@ import kotlin.properties.Delegates
  * Created by wangqi on 2016/2/26.
  */
 class WeiBoListFragment: BaseFragment() {
+
     companion object{
         val LIST_TYPE_WB_SQUARE = 0
         val LIST_TYPE_WB_FAVOR = 1
@@ -29,10 +30,12 @@ class WeiBoListFragment: BaseFragment() {
     val recyclerView by lazyFind<RecyclerView>(R.id.recycler_view)
     val refreshLayout by lazyFind<SwipeRefreshLayout>(R.id.swipe_refresh)
 
-    var listType by Delegates.notNull<Int>()
+    var listType: Int = 0
     val pageSubject = PublishSubject.create<Int>()
-    var page by Delegates.observable(1){ prop, oldPage, newPage ->
+    var page by Delegates.observable(0){ prop, oldPage, newPage ->
         //request new page resource
+        if (newPage == 0) return@observable
+
         if (oldPage !== newPage || (oldPage === newPage && oldPage === 1)){
             pageSubject.onNext(newPage)
         }
@@ -47,7 +50,7 @@ class WeiBoListFragment: BaseFragment() {
         refreshLayout.isRefreshing = true
 
         val listAdapter = WeiboListAdapter()
-        val layoutManager = LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = listAdapter
         recyclerView.layoutManager = layoutManager
 
@@ -61,14 +64,29 @@ class WeiBoListFragment: BaseFragment() {
                 }
             }
             .safelySubscribeWithLifecycle(this, {
-                if(it == null) return@safelySubscribeWithLifecycle
+                if(it == null) {
+                    aaaLoge { "error $listType" }
+                    return@safelySubscribeWithLifecycle
+                }
                 handleWeiboPage(it)
+            }, {
+                aaaLoge { "error $listType" }
             })
-        page = 1
+    }
 
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        aaaLoge { "$listType visible change $isVisibleToUser" }
+        super.setUserVisibleHint(isVisibleToUser)
+        if (page == 0 && isVisibleToUser) {
+            aaaLoge { "$listType this fragment is visible $this" }
+            activity.window.decorView.post{
+                page = 1
+            }
+        }
     }
 
     private fun handleWeiboPage(weiboPage: WeiboPage) {
-        aaaLoge { weiboPage.toString() }
+        aaaLoge { "getResult $listType" }
     }
 }
