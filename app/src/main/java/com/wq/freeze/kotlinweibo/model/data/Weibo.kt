@@ -1,5 +1,7 @@
 package com.wq.freeze.kotlinweibo.model.data
 
+import java.util.regex.Pattern
+
 /**
  * Created by wangqi on 2016/2/25.
  */
@@ -9,7 +11,7 @@ data class Weibo(
     val mid: Long,
     val idstr: String,//字符串型的微博ID
     val text: String, //微博信息内容
-    val source: String, //微博来源
+    var source: String, //微博来源
     val favorited: Boolean,
     val truncated: Boolean, //是否被截断，true：是，false：否
     val in_reply_to_status_id: String?,
