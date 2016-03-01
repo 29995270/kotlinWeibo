@@ -15,7 +15,7 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import com.wq.freeze.kotlinweibo.App
 import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.aaaLogv
-import com.wq.freeze.kotlinweibo.extension.postRun
+import com.wq.freeze.kotlinweibo.extension.postRunDelay
 import com.wq.freeze.kotlinweibo.extension.safelySubscribeWithLifecycle
 import com.wq.freeze.kotlinweibo.model.config.APP_ID
 import com.wq.freeze.kotlinweibo.model.config.AppPreference
@@ -39,7 +39,7 @@ class LoginActivity: RxAppCompatActivity() {
             authButton.visibility = View.VISIBLE
         } else {
             toast("auto login")
-            postRun(1500) {
+            postRunDelay(1500) {
                 startActivity(intentFor<MainActivity>("token" to tokenPref, "uid" to uidPref))
                 finish()
             }

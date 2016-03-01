@@ -85,7 +85,7 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     }
 
     private fun logout() {
-        showAlert("are you sure?", "logout"){
+        showAlert("Are you sure?", "Logout"){
             tokenPref = ""
             uidPref = 0L
             finish()

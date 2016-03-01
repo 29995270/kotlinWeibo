@@ -2,13 +2,20 @@ package com.wq.freeze.kotlinweibo.extension
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
+import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialog
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import com.trello.rxlifecycle.components.support.RxFragment
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -46,17 +53,32 @@ fun <T: View>Fragment.lazyFind(@IdRes id: Int): ReadOnlyProperty<Fragment, T> {
     }
 }
 
-fun RxAppCompatActivity.postRun(delay: Long = 0, runnable: () -> Unit) {
-    val decorView = this.window.decorView
-    if (decorView == null) {
-        aaaLoge { "may activity not init, can not post run" }
-    } else {
-        Observable.just(null)
-                .delay(delay, TimeUnit.MILLISECONDS)
-                .compose(this.bindToLifecycle<Nothing>())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ runnable() })
+fun <T: View> RecyclerView.ViewHolder.lazyFind(@IdRes id: Int): ReadOnlyProperty<RecyclerView.ViewHolder, T> {
+    return object : ReadOnlyProperty<RecyclerView.ViewHolder, T>{
+        var view: T? = null
+        override fun getValue(thisRef: RecyclerView.ViewHolder, property: KProperty<*>): T {
+            if (view == null) {
+                view = thisRef.itemView.findViewById(id) as T
+            }
+            return view!!
+        }
     }
+}
+
+fun RxAppCompatActivity.postRunDelay(delay: Long = 0, runnable: () -> Unit) {
+    Observable.just(null)
+            .delay(delay, TimeUnit.MILLISECONDS)
+            .compose(this.bindToLifecycle<Nothing>())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ runnable() })
+}
+
+fun RxFragment.postRunDelay(delay: Long = 0, runnable: () -> Unit) {
+    Observable.just(null)
+            .delay(delay, TimeUnit.MILLISECONDS)
+            .compose(this.bindToLifecycle<Nothing>())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ runnable() })
 }
 
 fun Activity.showAlert(message: String, title: String, rightClick: () -> Unit){
@@ -68,5 +90,19 @@ fun Activity.showAlert(message: String, title: String, rightClick: () -> Unit){
         }
         setNegativeButton("no", null)
     }.show()
+}
 
+fun Activity?.postRunImmediately(run: () -> Unit) {
+    if (this == null) return
+    ContextHelper.handler.post { run() }
+}
+
+fun Activity?.getDrawableCompat(@DrawableRes drawable: Int): Drawable =
+    with(this) {
+        ContextCompat.getDrawable(this, drawable)
+    }
+
+private object ContextHelper {
+    val handler = Handler(Looper.getMainLooper())
+    val mainThread = Looper.getMainLooper().thread
 }

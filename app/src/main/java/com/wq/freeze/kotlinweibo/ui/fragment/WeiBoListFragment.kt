@@ -6,9 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.wq.freeze.kotlinweibo.R
-import com.wq.freeze.kotlinweibo.extension.aaaLoge
-import com.wq.freeze.kotlinweibo.extension.lazyFind
-import com.wq.freeze.kotlinweibo.extension.safelySubscribeWithLifecycle
+import com.wq.freeze.kotlinweibo.extension.*
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
 import com.wq.freeze.kotlinweibo.ui.adapter.WeiboListAdapter
@@ -19,7 +17,7 @@ import kotlin.properties.Delegates
 /**
  * Created by wangqi on 2016/2/26.
  */
-class WeiBoListFragment: BaseFragment() {
+class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     companion object{
         val LIST_TYPE_WB_SQUARE = 0
@@ -35,11 +33,11 @@ class WeiBoListFragment: BaseFragment() {
     var page by Delegates.observable(0){ prop, oldPage, newPage ->
         //request new page resource
         if (newPage == 0) return@observable
-
         if (oldPage !== newPage || (oldPage === newPage && oldPage === 1)){
             pageSubject.onNext(newPage)
         }
     }
+    lateinit var listAdapter: WeiboListAdapter
 
     override val layoutRes: Int = R.layout.fragment_weibo_list
 
@@ -47,9 +45,7 @@ class WeiBoListFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         listType = arguments.getInt("list_type", 0)
 
-        refreshLayout.isRefreshing = true
-
-        val listAdapter = WeiboListAdapter()
+        listAdapter = WeiboListAdapter(mutableListOf())
         val layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = listAdapter
         recyclerView.layoutManager = layoutManager
@@ -63,6 +59,12 @@ class WeiBoListFragment: BaseFragment() {
                     else -> Observable.just(null)
                 }
             }
+            .doOnSubscribe {
+                if (page == 1 && listAdapter.dataSrc.size == 0) refreshLayout.isRefreshing = true
+            }
+            .doOnNext {
+                refreshLayout.isRefreshing = false
+            }
             .safelySubscribeWithLifecycle(this, {
                 if(it == null) {
                     aaaLoge { "error $listType" }
@@ -72,6 +74,10 @@ class WeiBoListFragment: BaseFragment() {
             }, {
                 aaaLoge { "error $listType" }
             })
+
+        refreshLayout.setOnRefreshListener(this)
+
+        refreshLayout.isEnabled = true
     }
 
 
@@ -80,13 +86,21 @@ class WeiBoListFragment: BaseFragment() {
         super.setUserVisibleHint(isVisibleToUser)
         if (page == 0 && isVisibleToUser) {
             aaaLoge { "$listType this fragment is visible $this" }
-            activity.window.decorView.post{
+            activity.postRunImmediately {
                 page = 1
             }
         }
     }
 
+    override fun onRefresh() {
+        //todo
+        postRunDelay(2000, {
+            refreshLayout.isRefreshing = false
+        })
+    }
+
     private fun handleWeiboPage(weiboPage: WeiboPage) {
-        aaaLoge { "getResult $listType" }
+        listAdapter.dataSrc.addAll(weiboPage.statuses)
+        listAdapter.notifyDataSetChanged()
     }
 }
