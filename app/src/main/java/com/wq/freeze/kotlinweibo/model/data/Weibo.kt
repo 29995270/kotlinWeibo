@@ -1,5 +1,6 @@
 package com.wq.freeze.kotlinweibo.model.data
 
+import com.wq.freeze.kotlinweibo.extension.aaaLoge
 import java.util.regex.Pattern
 
 /**
@@ -11,7 +12,7 @@ data class Weibo(
     val mid: Long,
     val idstr: String,//字符串型的微博ID
     val text: String, //微博信息内容
-    var source: String, //微博来源
+    val source: String, //微博来源
     val favorited: Boolean,
     val truncated: Boolean, //是否被截断，true：是，false：否
     val in_reply_to_status_id: String?,
@@ -29,4 +30,13 @@ data class Weibo(
     val mlevel: Int?
 //    val visible: Any?,
 
-)
+) {
+    companion object{
+        val p_html = Pattern.compile("<[^>]+>", Pattern.CASE_INSENSITIVE);
+    }
+    fun getSourceString(): String{
+        val m_html = p_html.matcher(source);
+        return m_html.replaceAll(""); // 过滤html标签
+    }
+
+}

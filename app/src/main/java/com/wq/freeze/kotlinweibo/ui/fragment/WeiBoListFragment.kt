@@ -10,6 +10,7 @@ import com.wq.freeze.kotlinweibo.extension.*
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
 import com.wq.freeze.kotlinweibo.ui.adapter.WeiboListAdapter
+import com.wq.freeze.kotlinweibo.ui.view.BottomLoadListener
 import rx.Observable
 import rx.subjects.PublishSubject
 import kotlin.properties.Delegates
@@ -76,6 +77,8 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             })
 
         refreshLayout.setOnRefreshListener(this)
+        val myLoadListener = MyLoadListener(false)
+        recyclerView.addOnScrollListener(BottomLoadListener(myLoadListener))
 
         refreshLayout.isEnabled = true
     }
@@ -97,6 +100,17 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         postRunDelay(2000, {
             refreshLayout.isRefreshing = false
         })
+    }
+
+    inner class MyLoadListener(override var isLoading: Boolean) : BottomLoadListener.LoadListener{
+        override fun onLoad() {
+            super.onLoad()
+            //todo
+            postRunDelay(2000, {
+                this@MyLoadListener.isLoading = false
+                aaaLoge { "loading finish" }
+            })
+        }
     }
 
     private fun handleWeiboPage(weiboPage: WeiboPage) {

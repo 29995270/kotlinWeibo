@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.wq.freeze.kotlinweibo.R
+import com.wq.freeze.kotlinweibo.extension.aaaLogv
 import com.wq.freeze.kotlinweibo.extension.lazyFind
 import com.wq.freeze.kotlinweibo.model.data.Weibo
 import com.wq.freeze.kotlinweibo.ui.view.VDraweeView
@@ -35,26 +36,30 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
             holder.avatar.setImageURI(Uri.parse(weibo.user.profile_image_url), null)
             holder.name.text = weibo.user.name
 
-            val regEx_html = "<[^>]+>";
-            val p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
-            val m_html = p_html.matcher(weibo.source);
-            weibo.source = m_html.replaceAll(""); // 过滤html标签
 
-            holder.from.text = weibo.created_at + "  来自" + weibo.source
+            holder.from.text = weibo.created_at + "  来自" + weibo.getSourceString()
             holder.content.text = weibo.text
 
-        } else if (holder is LoadHolder && getItemViewType(position) == TYPE_FOOTER) {
+            if (weibo.retweeted_status != null) {
+                holder.retweeted.visibility = View.VISIBLE
+                holder.retweetedContent.text = "@${weibo.retweeted_status.user.name}:${weibo.retweeted_status.text}"
+            } else{
+                holder.retweeted.visibility = View.GONE
+            }
 
+        } else if (holder is LoadHolder && getItemViewType(position) == TYPE_FOOTER) {
+            if (itemCount != 1)
+                holder.progressBar.visibility = View.VISIBLE
         }
 
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup?, position: Int): RecyclerView.ViewHolder {
-        return if (getItemViewType(position) == TYPE_ITEM) {
+    override fun onCreateViewHolder(viewGroup: ViewGroup?, type: Int): RecyclerView.ViewHolder {
+        return if (type == TYPE_ITEM) {
             val view = LayoutInflater.from(viewGroup?.context).inflate(R.layout.item_weibo_list, viewGroup, false)
             WeiboHolder(view)
         } else {
-            WeiboHolder(LayoutInflater.from(viewGroup?.context).inflate(R.layout.widget_load_footer, viewGroup, false))
+            LoadHolder(LayoutInflater.from(viewGroup?.context).inflate(R.layout.widget_load_footer, viewGroup, false))
         }
     }
 
@@ -71,8 +76,22 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
         val name by lazyFind<TextView>(R.id.name)
         val from by lazyFind<TextView>(R.id.from)
         val content by lazyFind<TextView>(R.id.content)
+        val retweeted by lazyFind<ViewGroup>(R.id.retweeted_weibo)
+        val retweetedContent by lazyFind<TextView>(R.id.retweeted_content)
+
+        init {
+            retweeted.visibility = View.GONE
+        }
     }
 
-    inner class LoadHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class LoadHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val progressBar by lazyFind<ProgressBar>(R.id.progress_bar)
+        val loadMessage by lazyFind<TextView>(R.id.message)
+
+        init {
+            progressBar.visibility = View.INVISIBLE
+            loadMessage.visibility = View.INVISIBLE
+        }
+    }
 
 }
