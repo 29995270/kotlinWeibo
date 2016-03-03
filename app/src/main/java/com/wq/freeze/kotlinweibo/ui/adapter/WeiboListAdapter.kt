@@ -2,6 +2,7 @@ package com.wq.freeze.kotlinweibo.ui.adapter
 
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.TextView
 import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.aaaLogv
 import com.wq.freeze.kotlinweibo.extension.lazyFind
+import com.wq.freeze.kotlinweibo.extension.setWeiboContent
 import com.wq.freeze.kotlinweibo.model.data.Weibo
 import com.wq.freeze.kotlinweibo.ui.view.VDraweeView
 import org.jetbrains.anko.find
@@ -38,11 +40,11 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
 
 
             holder.from.text = weibo.created_at + "  来自" + weibo.getSourceString()
-            holder.content.text = weibo.text
+            holder.content.setWeiboContent(weibo.text)
 
             if (weibo.retweeted_status != null) {
                 holder.retweeted.visibility = View.VISIBLE
-                holder.retweetedContent.text = "@${weibo.retweeted_status.user.name}:${weibo.retweeted_status.text}"
+                holder.retweetedContent.setWeiboContent("@${weibo.retweeted_status.user.name}:${weibo.retweeted_status.text}")
             } else{
                 holder.retweeted.visibility = View.GONE
             }

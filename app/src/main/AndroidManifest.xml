@@ -27,6 +27,17 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.ClickIntentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="kotlin"
+                    />
+            </intent-filter>
+        </activity>
+
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
                   android:configChanges="keyboardHidden|orientation"
                   android:windowSoftInputMode="adjustResize"
