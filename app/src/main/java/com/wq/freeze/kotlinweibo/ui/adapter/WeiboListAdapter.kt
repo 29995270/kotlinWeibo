@@ -2,21 +2,16 @@ package com.wq.freeze.kotlinweibo.ui.adapter
 
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.wq.freeze.kotlinweibo.R
-import com.wq.freeze.kotlinweibo.extension.aaaLogv
 import com.wq.freeze.kotlinweibo.extension.lazyFind
 import com.wq.freeze.kotlinweibo.extension.setWeiboContent
 import com.wq.freeze.kotlinweibo.model.data.Weibo
 import com.wq.freeze.kotlinweibo.ui.view.VDraweeView
-import org.jetbrains.anko.find
-import java.util.regex.Pattern
-import kotlin.properties.Delegates
 
 /**
  * Created by Administrator on 2016/2/27.
