@@ -2,13 +2,16 @@ package com.wq.freeze.kotlinweibo.model.net
 
 import com.squareup.moshi.Moshi
 import com.wq.freeze.kotlinweibo.App
+import com.wq.freeze.kotlinweibo.extension.aaaLoge
 import com.wq.freeze.kotlinweibo.extension.androidSchedulers
 import com.wq.freeze.kotlinweibo.model.config.AppPreference
 import com.wq.freeze.kotlinweibo.model.config.BASE_URI
 import com.wq.freeze.kotlinweibo.model.data.TokenInfo
 import com.wq.freeze.kotlinweibo.model.data.User
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -22,8 +25,12 @@ class ApiImpl(){
         private lateinit var api: Api
         private val moshi = Moshi.Builder().build()
         init {
-            val okHttpClient = OkHttpClient()
-
+            val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor {
+                        aaaLoge { it.request().url().url().toString() }
+                        it.proceed(it.request())
+                    }
+                    .build()
             val retrofit = Retrofit.Builder()
                     .client(okHttpClient)
                     .baseUrl(BASE_URI)

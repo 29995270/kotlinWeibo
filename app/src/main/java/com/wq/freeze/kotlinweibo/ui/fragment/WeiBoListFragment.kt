@@ -47,7 +47,11 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         listType = arguments.getInt("list_type", 0)
 
         listAdapter = WeiboListAdapter(mutableListOf())
-        val layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
+        val layoutManager = object : LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false) {
+            override fun getExtraLayoutSpace(state: RecyclerView.State?): Int {
+                return super.getExtraLayoutSpace(state) + 200  //to fix item requestLayout
+            }
+        }
         recyclerView.adapter = listAdapter
         recyclerView.layoutManager = layoutManager
 

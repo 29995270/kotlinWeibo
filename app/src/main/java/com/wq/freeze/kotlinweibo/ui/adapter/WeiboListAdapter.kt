@@ -2,21 +2,18 @@ package com.wq.freeze.kotlinweibo.ui.adapter
 
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.wq.freeze.kotlinweibo.R
-import com.wq.freeze.kotlinweibo.extension.aaaLogv
 import com.wq.freeze.kotlinweibo.extension.lazyFind
 import com.wq.freeze.kotlinweibo.extension.setWeiboContent
 import com.wq.freeze.kotlinweibo.model.data.Weibo
+import com.wq.freeze.kotlinweibo.ui.view.NineGridImageView
+import com.wq.freeze.kotlinweibo.ui.view.NineImageGridLayout
 import com.wq.freeze.kotlinweibo.ui.view.VDraweeView
-import org.jetbrains.anko.find
-import java.util.regex.Pattern
-import kotlin.properties.Delegates
 
 /**
  * Created by Administrator on 2016/2/27.
@@ -42,12 +39,31 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
             holder.from.text = weibo.created_at + "  来自" + weibo.getSourceString()
             holder.content.setWeiboContent(weibo.text)
 
+            if (weibo.pic_urls != null && weibo.pic_urls.size != 0) {
+                holder.gridImage.visibility = View.VISIBLE
+                holder.gridImage.pics = weibo.pic_urls
+            } else {
+                holder.gridImage.visibility = View.GONE
+            }
+
             if (weibo.retweeted_status != null) {
                 holder.retweeted.visibility = View.VISIBLE
                 holder.retweetedContent.setWeiboContent("@${weibo.retweeted_status.user.name}:${weibo.retweeted_status.text}")
+
+                if (weibo.retweeted_status.pic_urls != null && weibo.retweeted_status.pic_urls.size != 0) {
+                    holder.retweetedGridImage.visibility = View.VISIBLE
+                    holder.retweetedGridImage.pics = weibo.retweeted_status.pic_urls
+                } else {
+                    holder.retweetedGridImage.visibility = View.GONE
+                }
+
             } else{
                 holder.retweeted.visibility = View.GONE
             }
+
+            holder.attitudesCount.text = "${weibo.attitudes_count} 点赞"
+            holder.commentsCount.text = "${weibo.comments_count} 评论"
+            holder.repostsCount.text = "${weibo.reposts_count} 转发"
 
         } else if (holder is LoadHolder && getItemViewType(position) == TYPE_FOOTER) {
             if (itemCount != 1)
@@ -80,6 +96,11 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
         val content by lazyFind<TextView>(R.id.content)
         val retweeted by lazyFind<ViewGroup>(R.id.retweeted_weibo)
         val retweetedContent by lazyFind<TextView>(R.id.retweeted_content)
+        val gridImage by lazyFind<NineGridImageView>(R.id.grid_image)
+        val retweetedGridImage by lazyFind<NineGridImageView>(R.id.retweeted_grid_image)
+        val repostsCount by lazyFind<TextView>(R.id.reposts_count)
+        val commentsCount by lazyFind<TextView>(R.id.comments_count)
+        val attitudesCount by lazyFind<TextView>(R.id.attitudes_count)
 
         init {
             retweeted.visibility = View.GONE

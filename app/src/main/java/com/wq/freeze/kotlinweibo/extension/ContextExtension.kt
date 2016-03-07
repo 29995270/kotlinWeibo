@@ -13,9 +13,12 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.RecyclerView
+import android.util.DisplayMetrics
 import android.view.View
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle.components.support.RxFragment
+import com.wq.freeze.kotlinweibo.App
+import org.jetbrains.anko.windowManager
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -102,7 +105,15 @@ fun Activity?.getDrawableCompat(@DrawableRes drawable: Int): Drawable =
         ContextCompat.getDrawable(this, drawable)
     }
 
+fun <T> T.screenWidth() = ContextHelper.outSize.widthPixels
+fun <T> T.screenHeight() = ContextHelper.outSize.heightPixels
+
 private object ContextHelper {
     val handler = Handler(Looper.getMainLooper())
     val mainThread = Looper.getMainLooper().thread
+    val display = App.appContext.windowManager.defaultDisplay
+    var outSize = DisplayMetrics()
+    init {
+        display.getMetrics(outSize)
+    }
 }
