@@ -39,6 +39,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
     lateinit var listAdapter: WeiboListAdapter
+    lateinit var myLoadListener: BottomLoadListener.LoadListener
 
     override val layoutRes: Int = R.layout.fragment_weibo_list
 
@@ -65,6 +66,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             }
             .doOnNext {
                 refreshLayout.isRefreshing = false
+                myLoadListener.isLoading = false
             }
             .safelySubscribeWithLifecycle(this, {
                 if(it == null) {
@@ -77,7 +79,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             })
 
         refreshLayout.setOnRefreshListener(this)
-        val myLoadListener = MyLoadListener(false)
+        myLoadListener = MyLoadListener(false)
         recyclerView.addOnScrollListener(BottomLoadListener(myLoadListener))
 
         refreshLayout.isEnabled = true
@@ -96,25 +98,24 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        //todo
-        postRunDelay(2000, {
-            refreshLayout.isRefreshing = false
-        })
+        page = 1
     }
 
     inner class MyLoadListener(override var isLoading: Boolean) : BottomLoadListener.LoadListener{
         override fun onLoad() {
             super.onLoad()
-            //todo
-            postRunDelay(2000, {
-                this@MyLoadListener.isLoading = false
-                aaaLoge { "loading finish" }
-            })
+            page++
         }
     }
 
     private fun handleWeiboPage(weiboPage: WeiboPage) {
-        listAdapter.dataSrc.addAll(weiboPage.statuses)
-        listAdapter.notifyDataSetChanged()
+
+        if (page == 1) {
+            listAdapter.refresh(weiboPage)
+        } else {
+            listAdapter.dataSrc.addAll(weiboPage.statuses)
+            listAdapter.notifyItemInserted(listAdapter.dataSrc.size)
+        }
+
     }
 }

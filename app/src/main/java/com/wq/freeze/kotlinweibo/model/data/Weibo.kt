@@ -27,8 +27,9 @@ data class Weibo(
     val reposts_count: Int, //转发数
     val comments_count: Int, //评论数
     val attitudes_count: Int, //表态数
-    val mlevel: Int?
+    val mlevel: Int?,
 //    val visible: Any?,
+    val pic_ids: String?
 
 ) {
     companion object{

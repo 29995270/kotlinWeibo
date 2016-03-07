@@ -11,6 +11,7 @@ import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.lazyFind
 import com.wq.freeze.kotlinweibo.extension.setWeiboContent
 import com.wq.freeze.kotlinweibo.model.data.Weibo
+import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import com.wq.freeze.kotlinweibo.ui.view.VDraweeView
 
 /**
@@ -68,6 +69,13 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
         return if (position == itemCount - 1) TYPE_FOOTER else TYPE_ITEM
     }
 
+    fun refresh(weiboPage: WeiboPage) {
+        val oldSize = dataSrc.size
+        dataSrc.clear()
+        dataSrc.addAll(weiboPage.statuses)
+        notifyItemRangeChanged(0, oldSize)
+    }
+
     inner class WeiboHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val avatar by lazyFind<VDraweeView>(R.id.avatar)
         val name by lazyFind<TextView>(R.id.name)
@@ -90,5 +98,4 @@ class WeiboListAdapter(val dataSrc: MutableList<Weibo>) : RecyclerView.Adapter<R
             loadMessage.visibility = View.INVISIBLE
         }
     }
-
 }
