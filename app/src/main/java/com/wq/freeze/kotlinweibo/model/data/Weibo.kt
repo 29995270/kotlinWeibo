@@ -1,6 +1,7 @@
 package com.wq.freeze.kotlinweibo.model.data
 
 import com.wq.freeze.kotlinweibo.extension.aaaLoge
+import java.util.*
 import java.util.regex.Pattern
 
 /**
@@ -29,8 +30,7 @@ data class Weibo(
     val attitudes_count: Int, //表态数
     val mlevel: Int?,
 //    val visible: Any?,
-    val pic_ids: String?
-
+    val pic_urls: List<Pic>?
 ) {
     companion object{
         val p_html = Pattern.compile("<[^>]+>", Pattern.CASE_INSENSITIVE);

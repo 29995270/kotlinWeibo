@@ -7,11 +7,14 @@
     app:cardElevation="4dp">
 
     <RelativeLayout
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:padding="4dp"
+        android:paddingTop="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:background="@android:color/white">
 
         <com.wq.freeze.kotlinweibo.ui.view.VDraweeView
@@ -55,10 +58,18 @@
             android:textSize="16sp"
             android:textColor="@android:color/black"/>
 
+        <com.wq.freeze.kotlinweibo.ui.view.NineGridImageView
+            android:id="@+id/grid_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"/>
+
         <RelativeLayout
             android:id="@+id/retweeted_weibo"
             android:background="#d7d7d7"
-            android:layout_below="@id/content"
+            android:layout_below="@id/grid_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -68,8 +79,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"/>
-
+            <com.wq.freeze.kotlinweibo.ui.view.NineGridImageView
+                android:id="@+id/retweeted_grid_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/retweeted_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"/>
         </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/retweeted_weibo">
+            <TextView
+                android:id="@+id/reposts_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/comments_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/attitudes_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"/>
+        </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
