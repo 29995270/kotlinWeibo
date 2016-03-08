@@ -7,7 +7,7 @@ import com.wq.freeze.kotlinweibo.extension.aaaLogv
 /**
  * Created by wangqi on 2016/3/2.
  */
-class BottomLoadListener(val loadListener: LoadListener): RecyclerView.OnScrollListener() {
+class BottomOnScrollListener(val loadListener: LoadListener): RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
     }

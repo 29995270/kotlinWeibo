@@ -98,21 +98,24 @@
             <TextView
                 android:id="@+id/reposts_count"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"/>
             <TextView
                 android:id="@+id/comments_count"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"/>
             <TextView
                 android:id="@+id/attitudes_count"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"/>
         </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.MotionEvent
 import android.view.View
 import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.*
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
 import com.wq.freeze.kotlinweibo.ui.adapter.WeiboListAdapter
-import com.wq.freeze.kotlinweibo.ui.view.BottomLoadListener
+import com.wq.freeze.kotlinweibo.ui.view.BottomOnScrollListener
 import rx.Observable
 import rx.subjects.PublishSubject
 import kotlin.properties.Delegates
@@ -65,7 +66,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
             .doOnSubscribe {
-                if (page == 1 && listAdapter.dataSrc.size == 0) refreshLayout.isRefreshing = true
+                if (page == 1 && listAdapter.dataSrc.size == 0) view.post { refreshLayout.isRefreshing = true }
             }
             .doOnNext {
                 refreshLayout.isRefreshing = false
@@ -82,7 +83,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
         refreshLayout.setOnRefreshListener(this)
         val myLoadListener = MyLoadListener(false)
-        recyclerView.addOnScrollListener(BottomLoadListener(myLoadListener))
+        recyclerView.addOnScrollListener(BottomOnScrollListener(myLoadListener))
 
         refreshLayout.isEnabled = true
     }
@@ -106,7 +107,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         })
     }
 
-    inner class MyLoadListener(override var isLoading: Boolean) : BottomLoadListener.LoadListener{
+    inner class MyLoadListener(override var isLoading: Boolean) : BottomOnScrollListener.LoadListener{
         override fun onLoad() {
             super.onLoad()
             //todo

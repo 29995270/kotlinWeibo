@@ -21,6 +21,7 @@ import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.aaaLoge
 import com.wq.freeze.kotlinweibo.extension.getDrawableCompat
 import com.wq.freeze.kotlinweibo.model.data.Pic
+import org.jetbrains.anko.dip
 import kotlin.properties.Delegates
 
 /**
@@ -84,9 +85,10 @@ class NineGridImageView: View {
         }
     }
 
-    var mWidth = 0
-    var mHeight = 0
-    var itemWidth = 0
+    private var mWidth = 0
+    private var mHeight = 0
+    private var itemWidth = 0
+    val gap = dip(2)
 
     constructor(context: Context): super(context) {
         initialize()
@@ -126,8 +128,8 @@ class NineGridImageView: View {
         super.onDraw(canvas)
         pics.forEachIndexed { i, pic ->
             val drawable = multiDraweeHolder[i].topLevelDrawable
-            aaaLoge { "drawable  ${drawable.intrinsicHeight} + ${drawable.intrinsicWidth}" }
-            drawable.setBounds(0, 0, itemWidth, itemWidth)
+//            aaaLoge { "drawable  ${drawable.intrinsicHeight} + ${drawable.intrinsicWidth}" }   always -1
+            drawable.setBounds(0, 0, itemWidth - gap, itemWidth - gap)
             canvas.save()
             canvas.translate((i % 3 * itemWidth).toFloat(), (i / 3 * itemWidth).toFloat())
             drawable.draw(canvas)

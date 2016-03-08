@@ -22,6 +22,7 @@ import org.jetbrains.anko.windowManager
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -43,6 +44,26 @@ fun <T: View>Activity.lazyFind(@IdRes id: Int): ReadOnlyProperty<Activity, T> {
         }
     }
 }
+
+// if i do not access this property,the onClick can not work
+fun <T: View>Activity.onClick(@IdRes id: Int, onClick: (v: View) -> Unit): ReadOnlyProperty<Activity, T> {
+
+    val viewProp = object : ReadOnlyProperty<Activity, T>{
+        var view: T? = null
+        override fun getValue(thisRef: Activity, property: KProperty<*>): T {
+            if (view == null) {
+                view = thisRef.findViewById(id) as T
+                (view as T).setOnClickListener{
+                    onClick(it)
+                }
+
+            }
+            return view!!
+        }
+    }
+    return viewProp
+}
+
 
 fun <T: View>Fragment.lazyFind(@IdRes id: Int): ReadOnlyProperty<Fragment, T> {
     return object : ReadOnlyProperty<Fragment, T>{

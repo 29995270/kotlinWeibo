@@ -10,13 +10,10 @@ import org.jetbrains.anko.verticalLayout
 /**
  * Created by wangqi on 2016/3/3.
  */
-class ClickIntentActivity: RxAppCompatActivity() {
+class PublishWeiboActivity : RxAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        verticalLayout {
-            backgroundColor = Color.BLUE
-        }
-        aaaLoge { intent.toString() }
+
     }
 }

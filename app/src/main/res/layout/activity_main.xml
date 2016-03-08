@@ -40,4 +40,14 @@
             app:headerLayout="@layout/widget_navi_head"/>
     </android.support.v4.widget.DrawerLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@mipmap/ic_common_edit"
+        app:layout_behavior="com.wq.freeze.kotlinweibo.ui.view.MyFabBehavior"/>
 </android.support.design.widget.CoordinatorLayout>
