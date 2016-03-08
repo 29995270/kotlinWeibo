@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.ClickIntentActivity">
+        <activity android:name=".ui.activity.PublishWeiboActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

@@ -13,7 +13,6 @@ import com.wq.freeze.kotlinweibo.extension.setWeiboContent
 import com.wq.freeze.kotlinweibo.model.data.Weibo
 import com.wq.freeze.kotlinweibo.model.data.WeiboPage
 import com.wq.freeze.kotlinweibo.ui.view.NineGridImageView
-import com.wq.freeze.kotlinweibo.ui.view.NineImageGridLayout
 import com.wq.freeze.kotlinweibo.ui.view.VDraweeView
 
 /**

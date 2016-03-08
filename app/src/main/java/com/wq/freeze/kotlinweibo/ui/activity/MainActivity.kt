@@ -1,7 +1,9 @@
 package com.wq.freeze.kotlinweibo.ui.activity
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
@@ -13,10 +15,7 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import com.wq.freeze.kotlinweibo.App
 import com.wq.freeze.kotlinweibo.R
-import com.wq.freeze.kotlinweibo.extension.aaaLogv
-import com.wq.freeze.kotlinweibo.extension.lazyFind
-import com.wq.freeze.kotlinweibo.extension.safelySubscribeWithLifecycle
-import com.wq.freeze.kotlinweibo.extension.showAlert
+import com.wq.freeze.kotlinweibo.extension.*
 import com.wq.freeze.kotlinweibo.model.config.AppPreference
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
 import com.wq.freeze.kotlinweibo.ui.adapter.MainPageAdapter
@@ -30,14 +29,15 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     val navi by lazyFind<NavigationView>(R.id.navigation_view)
     val viewPage by lazyFind<ViewPager>(R.id.vp)
     val tabLayout by lazyFind<TabLayout>(R.id.tab_layout)
+    val fab by onClick<FloatingActionButton>(R.id.fab){
+        val intent = Intent(this, PublishWeiboActivity::class.java)
+        startActivity(intent)
+    }
     lateinit var avatar: SimpleDraweeView
     lateinit var nick: TextView
 
     var tokenPref by AppPreference.anyPreference(App.appContext, "token", "")
     var uidPref by AppPreference.anyPreference(App.appContext, "uid", 0L)
-
-//    var token by Delegates.notNull<String>()
-//    var uid by Delegates.notNull<Long>()
 
     var mainPageAdapter by Delegates.notNull<MainPageAdapter>()
 
@@ -61,6 +61,7 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
 //        uid = intent.extras.getLong("uid", 0L)
         initViewPage()
         initNavigationView()
+        initFab()
     }
 
     private fun initNavigationView() {
@@ -82,6 +83,10 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
                 else -> false
             }
         }
+    }
+
+    private fun initFab() {
+        fab
     }
 
     private fun logout() {
@@ -112,12 +117,4 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     override fun onTabReselected(p0: TabLayout.Tab?) {
         aaaLogv { "reselected ${p0?.position.toString()}" }
     }
-
-    //not work
-//    fun handleViewPageLimit() {
-//        val clazz = viewPage.javaClass
-//        val declaredField = clazz.getDeclaredField("DEFAULT_OFFSCREEN_PAGES")
-//        declaredField.isAccessible = true
-//        declaredField.setInt(viewPage, 0)
-//    }
 }
