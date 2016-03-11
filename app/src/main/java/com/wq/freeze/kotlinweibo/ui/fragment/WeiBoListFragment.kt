@@ -84,7 +84,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             })
 
         refreshLayout.setOnRefreshListener(this)
-        val myLoadListener = MyLoadListener(false)
+        myLoadListener = MyLoadListener(false)
         recyclerView.addOnScrollListener(BottomOnScrollListener(myLoadListener))
 
         refreshLayout.isEnabled = true
@@ -109,7 +109,7 @@ class WeiBoListFragment: BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     inner class MyLoadListener(override var isLoading: Boolean) : BottomOnScrollListener.LoadListener{
         override fun onLoad() {
             super.onLoad()
-            page++
+//            page++
         }
     }
 

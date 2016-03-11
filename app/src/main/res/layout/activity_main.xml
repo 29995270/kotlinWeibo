@@ -50,4 +50,11 @@
         android:layout_marginBottom="16dp"
         android:src="@mipmap/ic_common_edit"
         app:layout_behavior="com.wq.freeze.kotlinweibo.ui.view.MyFabBehavior"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@android:color/black">
+    </FrameLayout>
+
 </android.support.design.widget.CoordinatorLayout>
