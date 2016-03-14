@@ -2,9 +2,12 @@ package com.wq.freeze.kotlinweibo
 
 import android.app.Activity
 import android.app.Application
+import android.content.AsyncTaskLoader
+import android.content.Context
 import android.os.Bundle
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.wq.freeze.kotlinweibo.extension.aaaLogv
+import com.wq.freeze.kotlinweibo.model.data.User
 
 /**
  * Created by wangqi on 2016/2/24.
@@ -49,6 +52,36 @@ class App: Application() {
 //            }
 //
 //        })
+    }
+
+
+    class MyAsyncLoader(context: Context): AsyncTaskLoader<User>(context) {
+
+        var user: User? = null
+
+        override fun loadInBackground(): User? {
+            context
+            return null
+        }
+
+        override fun onStartLoading() {
+            // Notify the loader to reload the data
+            onContentChanged()
+
+            if (user == null)
+                forceLoad()
+            else
+                deliverResult(user)
+        }
+
+        override fun deliverResult(data: User?) {
+            super.deliverResult(data)
+        }
+
+        override fun onReset() {
+            super.onReset()
+        }
+
     }
 
 }
