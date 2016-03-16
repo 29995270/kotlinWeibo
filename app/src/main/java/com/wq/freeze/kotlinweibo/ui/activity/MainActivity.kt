@@ -18,6 +18,7 @@ import com.wq.freeze.kotlinweibo.R
 import com.wq.freeze.kotlinweibo.extension.*
 import com.wq.freeze.kotlinweibo.model.config.AppPreference
 import com.wq.freeze.kotlinweibo.model.net.ApiImpl
+import com.wq.freeze.kotlinweibo.mosbymvp.MosbyActivity
 import com.wq.freeze.kotlinweibo.ui.adapter.MainPageAdapter
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
@@ -67,6 +68,11 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     private fun initNavigationView() {
         avatar = navi.getHeaderView(0).find<SimpleDraweeView>(R.id.avatar)
         nick = navi.getHeaderView(0).find<TextView>(R.id.nick)
+
+        avatar.setOnClickListener({
+            startActivity(Intent(this, MosbyActivity::class.java))
+        })
+
         ApiImpl.instance.getUserInfo(tokenPref, uidPref)
                 .safelySubscribeWithLifecycle(this, {
                     avatar.setImageURI(Uri.parse(it.profile_image_url), null)
