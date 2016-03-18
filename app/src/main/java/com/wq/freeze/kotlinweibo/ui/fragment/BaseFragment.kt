@@ -30,17 +30,5 @@ abstract class BaseFragment: RxFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        loaderManager.initLoader(0, null, object : LoaderManager.LoaderCallbacks<User>{
-            override fun onLoaderReset(p0: Loader<User>?) {
-            }
-
-            override fun onLoadFinished(p0: Loader<User>?, p1: User?) {
-            }
-
-            override fun onCreateLoader(p0: Int, p1: Bundle?): Loader<User>? {
-                return null
-            }
-
-        }).startLoading()
     }
 }

@@ -76,6 +76,12 @@ class App: Application() {
 
         override fun deliverResult(data: User?) {
             super.deliverResult(data)
+            var name = fun() {
+                println("name")
+            }
+            name()
+
+            var value = fun(name: String) = name.length
         }
 
         override fun onReset() {
