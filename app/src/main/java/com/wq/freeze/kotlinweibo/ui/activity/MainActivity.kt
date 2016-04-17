@@ -67,6 +67,7 @@ class MainActivity : RxAppCompatActivity(), TabLayout.OnTabSelectedListener {
     private fun initNavigationView() {
         avatar = navi.getHeaderView(0).find<SimpleDraweeView>(R.id.avatar)
         nick = navi.getHeaderView(0).find<TextView>(R.id.nick)
+
         ApiImpl.instance.getUserInfo(tokenPref, uidPref)
                 .safelySubscribeWithLifecycle(this, {
                     avatar.setImageURI(Uri.parse(it.profile_image_url), null)

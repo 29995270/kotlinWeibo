@@ -2,12 +2,15 @@ package com.wq.freeze.kotlinweibo.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.Loader
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trello.rxlifecycle.components.support.RxFragment
 import com.wq.freeze.kotlinweibo.extension.aaaLogv
 import com.wq.freeze.kotlinweibo.extension.safelySubscribeWithLifecycle
+import com.wq.freeze.kotlinweibo.model.data.User
 import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
 
@@ -23,5 +26,9 @@ abstract class BaseFragment: RxFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutRes, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
     }
 }
